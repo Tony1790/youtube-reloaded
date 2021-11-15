@@ -1,0 +1,30 @@
+{
+  "name": "youtubecloning",
+  "version": "1.0.0",
+  "description": "The best way to watch videos.",
+  "scripts": {
+    "dev": "nodemon --exec babel-node src/init.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tony1790/youtube-reloaded.git"
+  },
+  "author": "TONY1790<tony45081790@kakao.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Tony1790/youtube-reloaded/issues"
+  },
+  "homepage": "https://github.com/Tony1790/youtube-reloaded#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^6.0.12",
+    "morgan": "^1.10.0",
+    "pug": "^3.0.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.16.0",
+    "@babel/node": "^7.16.0",
+    "@babel/preset-env": "^7.16.0",
+    "nodemon": "^2.0.15"
+  }
+}
