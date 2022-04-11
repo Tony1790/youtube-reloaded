@@ -1,8 +1,7 @@
 import Video from "../models/video";
-import videoRouter from "../routers/videoRouter";
 
 export const home = async (req, res) => {
-  const video = await Video.find({});
+  const videos = await Video.find({});
   return res.render("home", { pageTitle: "Home", videos });
 };
 
