@@ -17,7 +17,7 @@
   "homepage": "https://github.com/Tony1790/youtube-reloaded#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "mongoose": "^6.0.12",
+    "mongoose": "^6.2.10",
     "morgan": "^1.10.0",
     "pug": "^3.0.2"
   },
