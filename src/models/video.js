@@ -11,6 +11,13 @@ const videoSchema = new mongoose.Schema({
   },
 });
 
+videoSchema.static("formatHashtag", function (hashtags) {
+  return hashtags
+    .split(",")
+    .map((word) => (word.startsWith("#") ? word : `#${word}`));
+});
+
+//몽구스 미들웨어는 반드시 몽구스 모델이 생성되기 전에 위치, 작동되어야한다
 const Video = mongoose.model("Video", videoSchema);
 
 export default Video;
