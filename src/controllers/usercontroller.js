@@ -57,6 +57,8 @@ export const postLogin = async (req, res) => {
       errorMessage: "비밀번호가 틀렸습니다.",
     });
   }
+  req.session.loggedIn = true;
+  req.session.user = user;
   console.log("User Logged In Just Now!");
   return res.redirect("/");
 };
