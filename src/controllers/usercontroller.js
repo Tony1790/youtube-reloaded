@@ -3,6 +3,7 @@ import fetch from "node-fetch";
 import bcrypt from "bcrypt";
 import { redirect } from "express/lib/response";
 import { application } from "express";
+import { token } from "morgan";
 
 export const getJoin = (req, res) => res.render("join", { pageTitle: "join" });
 export const postJoin = async (req, res) => {
@@ -168,17 +169,22 @@ export const finishKakaoLogin = async (req, res) => {
       },
     })
   ).json();
+  console.log(tokenRequest);
+
   if ("access_token" in tokenRequest) {
     //엑세스 토큰이 있는 경우 API에 접근
     const { access_token } = tokenRequest;
-    const apiUrl = "https://kapi.kakao.com";
-    const userData = await (
-      await fetch(`${apiUrl}/user`, {
+    const userRequest = await (
+      await fetch("https://kapi.kakao.com/v2/user/me", {
         headers: {
-          Authorization: `token ${access_token}`,
+          Authorization: `Bearer ${access_token}`,
+          "Content-type": "application/json",
         },
       })
     ).json();
+    console.log(userRequest);
+  } else {
+    return res.redirect("/login");
   }
 };
 
