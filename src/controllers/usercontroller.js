@@ -1,6 +1,7 @@
 import User from "../models/User";
 import fetch from "node-fetch";
 import bcrypt from "bcrypt";
+import { redirect } from "express/lib/response";
 
 export const getJoin = (req, res) => res.render("join", { pageTitle: "join" });
 export const postJoin = async (req, res) => {
@@ -46,14 +47,14 @@ export const postLogin = async (req, res) => {
   if (!user) {
     return res.status(400).render("Login", {
       pageTitle,
-      errorMessage: "유저네임이 틀렸습니다.",
+      errorMessage: "An account with this username does not exists.",
     });
   }
   const ok = await bcrypt.compare(password, user.password);
   if (!ok) {
     return res.status(400).render("Login", {
       pageTitle,
-      errorMessage: "비밀번호가 틀렸습니다.",
+      errorMessage: "Wrong password",
     });
   }
   req.session.loggedIn = true;
@@ -118,6 +119,7 @@ export const finishGithubLogin = async (req, res) => {
     let user = await User.findOne({ email: emailObj.email });
     if (!user) {
       user = await User.create({
+        avatarUrl: userData.avatar_url,
         name: userData.name,
         username: userData.login,
         email: emailObj.email,
@@ -134,7 +136,9 @@ export const finishGithubLogin = async (req, res) => {
   }
 };
 
-export const logout = (req, res) => res.send("Logout");
+export const logout = (req, res) => {
+  req.session.destroy();
+  return res.redirect("/");
+};
 export const edit = (req, res) => res.send("Edit User");
-export const remove = (req, res) => res.send("Delete User");
 export const see = (req, res) => res.send("SEE");
