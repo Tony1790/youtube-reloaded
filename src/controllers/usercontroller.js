@@ -2,6 +2,7 @@ import User from "../models/User";
 import fetch from "node-fetch";
 import bcrypt from "bcrypt";
 import { redirect } from "express/lib/response";
+import { application } from "express";
 
 export const getJoin = (req, res) => res.render("join", { pageTitle: "join" });
 export const postJoin = async (req, res) => {
@@ -133,6 +134,51 @@ export const finishGithubLogin = async (req, res) => {
     return res.redirect("/");
   } else {
     return res.redirect("/login");
+  }
+};
+
+export const startKakaoLogin = (req, res) => {
+  const baseUrl = "https://kauth.kakao.com/oauth/authorize";
+  const config = {
+    client_id: process.env.KA_CLIENT,
+    redirect_uri: "http://localhost:4000/users/kakao/finish",
+    response_type: "code",
+  };
+  const params = new URLSearchParams(config).toString();
+  const finalUrl = `${baseUrl}?${params}`;
+  return res.redirect(finalUrl);
+};
+
+export const finishKakaoLogin = async (req, res) => {
+  const baseUrl = "https://kauth.kakao.com/oauth/token";
+  const config = {
+    client_id: process.env.KA_CLIENT,
+    client_secret: process.env.KA_SECRET,
+    grant_type: "authorization_code",
+    redirect_uri: "http://localhost:4000/users/kakao/finish",
+    code: req.query.code,
+  };
+  const params = new URLSearchParams(config).toString();
+  const finalUrl = `${baseUrl}?${params}`;
+  const tokenRequest = await (
+    await fetch(finalUrl, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+    })
+  ).json();
+  if ("access_token" in tokenRequest) {
+    //엑세스 토큰이 있는 경우 API에 접근
+    const { access_token } = tokenRequest;
+    const apiUrl = "https://kapi.kakao.com";
+    const userData = await (
+      await fetch(`${apiUrl}/user`, {
+        headers: {
+          Authorization: `token ${access_token}`,
+        },
+      })
+    ).json();
   }
 };
 
