@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import { redirect } from "express/lib/response";
 import { application } from "express";
 import { token } from "morgan";
+import { use } from "bcrypt/promises";
 
 export const getJoin = (req, res) => res.render("join", { pageTitle: "join" });
 export const postJoin = async (req, res) => {
@@ -169,7 +170,6 @@ export const finishKakaoLogin = async (req, res) => {
       },
     })
   ).json();
-  console.log(tokenRequest);
 
   if ("access_token" in tokenRequest) {
     //엑세스 토큰이 있는 경우 API에 접근
@@ -182,7 +182,22 @@ export const finishKakaoLogin = async (req, res) => {
         },
       })
     ).json();
-    console.log(userRequest);
+    const email = userRequest.kakao_account.email;
+    let user = await User.findOne({ email });
+    if (!user) {
+      user = await User.create({
+        avatarUrl: userRequest.properties.profile_image,
+        name: userRequest.kakao_account.profile.nickname,
+        username: userRequest.kakao_account.profile.nickname,
+        email: email,
+        password: "",
+        socialOnly: true,
+        location: userRequest.kakao_account.location,
+      });
+    }
+    req.session.loggedIn = true;
+    req.session.user = user;
+    return res.redirect("/");
   } else {
     return res.redirect("/login");
   }
