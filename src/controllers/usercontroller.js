@@ -1,10 +1,6 @@
 import User from "../models/User";
 import fetch from "node-fetch";
 import bcrypt from "bcrypt";
-import { redirect } from "express/lib/response";
-import { application } from "express";
-import { token } from "morgan";
-import { use } from "bcrypt/promises";
 
 export const getJoin = (req, res) => res.render("join", { pageTitle: "join" });
 export const postJoin = async (req, res) => {
@@ -207,5 +203,58 @@ export const logout = (req, res) => {
   req.session.destroy();
   return res.redirect("/");
 };
+
+export const getEdit = (req, res) => {
+  return res.render("edit-profile", {
+    pageTitle: `Edit ${req.session.user.name}'s profile`,
+  });
+};
+
+export const postEdit = async (req, res) => {
+  const {
+    session: {
+      user: { _id },
+    }, //session안에 있는 user의 정보
+    body: { name, email, username, location },
+    //form안에 입력한 user의 정보
+  } = req;
+  const loggedInUserUsername = res.locals.loggedInUser.username;
+  const loggedInUserEmail = res.locals.loggedInUser.email;
+  const loggedInUserName = res.locals.loggedInUser.name;
+  const pageTitle = `Edit ${req.session.user.name}의 Profile`;
+  const exists = await User.exists({
+    $or: [{ username }, { email }, { name }],
+  });
+  if (exists && username !== loggedInUserUsername) {
+    return res.status(400).render("edit-profile", {
+      pageTitle,
+      errorMessage: "입력한 username은 이미 있습니다.",
+    });
+  } else if (exists && email !== loggedInUserEmail) {
+    return res.status(400).render("edit-profile", {
+      pageTitle,
+      errorMessage: "입력한 email은 이미 있습니다.",
+    });
+  } else if (exists && name !== loggedInUserName) {
+    return res.status(400).render("edit-profile", {
+      pageTitle,
+      errorMessage: "입력한 name은 이미 있습니다.",
+    });
+  }
+
+  const updateUser = await User.findByIdAndUpdate(
+    _id,
+    {
+      name,
+      email,
+      username,
+      location,
+    },
+    { new: true }
+  );
+  req.session.user = updateUser;
+  return res.redirect("/users/edit");
+};
+
 export const edit = (req, res) => res.send("Edit User");
 export const see = (req, res) => res.send("SEE");
