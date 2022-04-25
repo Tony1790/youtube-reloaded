@@ -10,3 +10,6 @@ block content
         input(name="email", placeholder="email",type="email", required=true, value=loggedInUser.email)
         input(name="location", placeholder="location",type="text", required=true, value=loggedInUser.location)
         input(type="submit", value="Update Profile")
+        if !loggedInUser.socialOnly
+            hr
+            a(href="change-password") Change Password 

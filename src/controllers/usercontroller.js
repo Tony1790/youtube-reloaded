@@ -218,9 +218,9 @@ export const postEdit = async (req, res) => {
     body: { name, email, username, location },
     //form안에 입력한 user의 정보
   } = req;
-  const loggedInUserUsername = res.locals.loggedInUser.username;
-  const loggedInUserEmail = res.locals.loggedInUser.email;
-  const loggedInUserName = res.locals.loggedInUser.name;
+  const loggedInUserUsername = req.session.username;
+  const loggedInUserEmail = req.session.email;
+  const loggedInUserName = req.session.name;
   const pageTitle = `Edit ${req.session.user.name}의 Profile`;
   const exists = await User.exists({
     $or: [{ username }, { email }, { name }],
@@ -256,5 +256,15 @@ export const postEdit = async (req, res) => {
   return res.redirect("/users/edit");
 };
 
-export const edit = (req, res) => res.send("Edit User");
+export const getChangePassword = (req, res) => {
+  if (req.session.user.socialOnly === true) {
+    return res.redirect("/");
+  }
+  return res.render("users/change-password", { pageTitle: "Change Password" });
+};
+export const postChangePassword = (req, res) => {
+  //send notification
+  return res.redirect("/");
+};
+
 export const see = (req, res) => res.send("SEE");
