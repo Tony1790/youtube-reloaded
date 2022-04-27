@@ -40,11 +40,14 @@ export const getUpload = (req, res) => {
 };
 
 export const postUpload = async (req, res) => {
+  const { path: fileUrl } = req.file;
+  //multer가 req.file을 제공해주고 file 안에는 path가 있다.
   const { title, description, hashtags } = req.body;
   try {
     await Video.create({
       title,
       description,
+      fileUrl,
       hashtags: Video.formatHashtag(hashtags),
     });
     return res.redirect("/");
