@@ -1,4 +1,3 @@
-import { redirect } from "express/lib/response";
 import multer from "multer";
 
 export const localsMiddleware = (req, res, next) => {
