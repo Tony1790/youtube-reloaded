@@ -1,0 +1,25 @@
+.social-login {
+  margin-top: 40px;
+  padding-top: 40px;
+  border-top: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+.github-login,
+.kakao-login {
+  margin-top: 10px;
+}
+
+.github__btn,
+.kakao__btn {
+  border-radius: 7px;
+  border-top: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.github__btn {
+  background-color: #6e5494;
+}
+
+.kakao__btn {
+  background-color: #ffe812;
+  color: #000000;
+}
