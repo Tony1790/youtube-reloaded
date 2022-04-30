@@ -11,10 +11,15 @@ header
                     a(href="/users/edit") Edit Profile                        
                 li 
                     a(href="/users/logout") Logout 
-                li
-                    a(href=`/users/${loggedInUser._id}`) #{loggedInUser.name}님의 프로필
                 li 
                     a(href="/videos/upload") Upload Video
+                li
+                    a(href=`/users/${loggedInUser._id}`) 
+                        if loggedInUser.avatarUrl == ""
+                            span 👦👧
+                        else 
+                            img.header__avatar(src=loggedInUser.avatarUrl)
+            
             else
                 li 
                     a(href="/join") 회원가입
