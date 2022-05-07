@@ -11,6 +11,7 @@ const fullScreenBtn = document.getElementById("fullscreen");
 const fullScreenBtnIcon = fullScreenBtn.querySelector("i");
 const videoContainer = document.getElementById("videoContainer");
 const videoControls = document.getElementById("videoControls");
+const textarea = document.getElementById("textarea");
 
 let controlsTimeout = null;
 let controlsMovementTimeout = null;
@@ -128,13 +129,13 @@ const handleMouseleave = () => {
 };
 
 const handlePressKey = (event) => {
-  if (event.keyCode === 32) {
+  if (event.keyCode === 32 && event.target.id !== "textarea") {
     handlePlayClick();
   }
-  if (event.keyCode === 70) {
+  if (event.keyCode === 70 && event.target.id !== "textarea") {
     handleFullScreen();
   }
-  if (event.keyCode === 77) {
+  if (event.keyCode === 77 && event.target.id !== "textarea") {
     handleMuteBtn();
   }
 };
@@ -145,6 +146,12 @@ const handleEnded = () => {
     method: "POST",
   });
 };
+
+/*const handleTextarea = (event) => {
+  if(event.keyCode === 32 && event.target.id !== "textarea") {
+    handlePlayClick();
+  }
+}*/
 
 playBtn.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMuteBtn);

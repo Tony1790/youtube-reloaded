@@ -1,12 +1,13 @@
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
 
-console.log(path.resolve(__dirname, "assets", "js"));
+const BASE_JS = "./src/client/js/";
 
 module.exports = {
   entry: {
-    main: "./src/client/js/main.js",
-    videoPlayer: "./src/client/js/videoPlayer.js",
+    main: BASE_JS + "main.js",
+    videoPlayer: BASE_JS + "videoPlayer.js",
+    commentSection: BASE_JS + "commentSection.js",
   },
   mode: "development",
   watch: true, //heroku로 변경시 수정
