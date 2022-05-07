@@ -26,6 +26,7 @@ export const getEdit = async (req, res) => {
     return res.status(404).render("404", { pageTitle: "Video is not found!!" });
   }
   if (String(video.owner) !== String(_id)) {
+    req.flash("error", "Not Autorized!");
     return res.status(403).redirect("/");
   }
   return res.render("edit", { pageTitle: `Edit : ${video.title}`, video });
@@ -41,6 +42,7 @@ export const postEdit = async (req, res) => {
     return res.status(404).render("404", { pageTitle: "Video is not found!!" });
   }
   if (String(video.owner) !== String(_id)) {
+    req.flash("error", "You are Not the Owner of Video!");
     return res.status(403).redirect("/");
   }
   await Video.findByIdAndUpdate(id, {
@@ -58,14 +60,16 @@ export const postUpload = async (req, res) => {
   const {
     user: { _id },
   } = req.session;
-  const { path: fileUrl } = req.file;
+  console.log(req.files);
+  const { video, thumb } = req.files;
   //multer가 req.file을 제공해주고 file 안에는 path가 있다.
   const { title, description, hashtags } = req.body;
   try {
     const newVideo = await Video.create({
       title,
       description,
-      fileUrl,
+      fileUrl: video[0].path,
+      thumbUrl: thumb[0].path,
       owner: _id,
       hashtags: Video.formatHashtag(hashtags),
     });
