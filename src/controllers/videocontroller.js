@@ -1,6 +1,7 @@
 import User from "../models/User";
 import Comment from "../models/Comment";
 import Video from "../models/Video";
+import { sendStatus } from "express/lib/response";
 
 export const home = async (req, res) => {
   const videos = await Video.find({})
@@ -139,6 +140,7 @@ export const createComment = async (req, res) => {
   } = req;
 
   const video = await Video.findById(id);
+  const userDB = await User.findById(user._id);
   if (!video) {
     return res.sendStatus(404);
   }
@@ -148,6 +150,45 @@ export const createComment = async (req, res) => {
     video: id,
   });
   video.comments.push(comment._id);
+  userDB.comments.push(comment._id);
   video.save();
-  return res.sendStatus(201);
+  userDB.save();
+  return res.status(201).json({ newCommentId: comment._id });
+};
+
+export const deleteComment = async (req, res) => {
+  const { id } = req.params;
+  //fetch로 받아온 코멘트 아이디.
+  const {
+    user: { _id },
+  } = req.session;
+  //코멘트를 지우고자 하는 세션의 유저 아이디.
+  const comment = await Comment.findById(id);
+  // DB안의 코멘트
+  const videoIdInsideOfcomment = comment.video;
+  const userIdInsideOfComment = comment.owner;
+  const video = await Video.findById(videoIdInsideOfcomment);
+  // DB 안의 비디오
+  const user = await User.findById(userIdInsideOfComment);
+  console.log(id);
+  // 지우고자 하는 코멘트의 아이디
+  console.log(String(user.comments));
+  console.log(String(video.comments));
+  //DB의 비디오 안의 코멘트 어레이를 문자열로 만듬.
+  const ownerId = String(comment.owner);
+  if (ownerId !== _id) {
+    return res.sendStatus(404);
+  }
+  await Comment.findByIdAndDelete(id);
+  video.comments.splice(video.comments.indexOf(id), 1);
+  user.comments.splice(user.comments.indexOf(id), 1);
+
+  video.save();
+  user.save();
+  // DB 안의 코멘트 어레이를 수정.
+  console.log(String(video.comments));
+  console.log(String(user.comments));
+  /*
+  await User.findByIdAndDelete(id);*/
+  return res.sendStatus(200);
 };

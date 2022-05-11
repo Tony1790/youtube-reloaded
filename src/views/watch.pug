@@ -38,12 +38,14 @@ block content
             form.video__comments-form#commentForm
                 textarea(cols="30", rows="10", placeholder="Write a comment")#textarea
                 button Add comment
-        div.video__comments
-            ul
-                each comment in video.comments.reverse()
-                    li.video__comment
-                        i.fas.fa-comment
-                        span #{comment.text}
+    div#commentsBox.video__comments
+        ul
+            each comment in video.comments.reverse()
+                li.video__comment
+                    i.fas.fa-comment
+                    span #{comment.text}.
+                    if String(comment.owner._id) === String(loggedInUser._id)
+                        span.deleteBtn(style = "cursor:pointer", data-id=comment._id) ❌
 block scripts 
     script(src="/static/js/videoPlayer.js")
     script(src="/static/js/commentSection.js")
