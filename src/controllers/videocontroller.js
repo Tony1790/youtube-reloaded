@@ -170,10 +170,7 @@ export const deleteComment = async (req, res) => {
   const video = await Video.findById(videoIdInsideOfcomment);
   // DB 안의 비디오
   const user = await User.findById(userIdInsideOfComment);
-  console.log(id);
   // 지우고자 하는 코멘트의 아이디
-  console.log(String(user.comments));
-  console.log(String(video.comments));
   //DB의 비디오 안의 코멘트 어레이를 문자열로 만듬.
   const ownerId = String(comment.owner);
   if (ownerId !== _id) {
@@ -186,9 +183,5 @@ export const deleteComment = async (req, res) => {
   video.save();
   user.save();
   // DB 안의 코멘트 어레이를 수정.
-  console.log(String(video.comments));
-  console.log(String(user.comments));
-  /*
-  await User.findByIdAndDelete(id);*/
   return res.sendStatus(200);
 };
