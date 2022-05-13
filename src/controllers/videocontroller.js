@@ -1,7 +1,6 @@
 import User from "../models/User";
 import Comment from "../models/Comment";
 import Video from "../models/Video";
-import { sendStatus } from "express/lib/response";
 
 export const home = async (req, res) => {
   const videos = await Video.find({})
@@ -183,5 +182,23 @@ export const deleteComment = async (req, res) => {
   video.save();
   user.save();
   // DB 안의 코멘트 어레이를 수정.
+  return res.sendStatus(200);
+};
+
+export const editComment = async (req, res) => {
+  const {
+    body: { text },
+    params: { id },
+  } = req;
+  console.log(text);
+  const comment = await Comment.findByIdAndUpdate(
+    id,
+    { text: text },
+    { new: true }
+  );
+  if (!comment) {
+    return res.sendStatus(404);
+  }
+
   return res.sendStatus(200);
 };

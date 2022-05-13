@@ -43,9 +43,21 @@ block content
             each comment in video.comments.reverse()
                 li.video__comment
                     i.fas.fa-comment
-                    span #{comment.text}.
+                    span#comment #{comment.text}.
                     if String(comment.owner._id) === String(loggedInUser._id)
+                        span#editBtn.editBtn(style = "cursor:pointer", data-id=comment._id) 수정
                         span.deleteBtn(style = "cursor:pointer", data-id=comment._id) ❌
+                    div#editBox.edit__comment(style="display:none")
+                        hr
+                        div.edit__comment-component1
+                            strong 댓글 수정
+                            span.editCancelBtn(style = "cursor:pointer") ✖
+                        form#edit__comment-form(data-id=comment._id)
+                            textarea#editTextarea(cols="30", rows="3")
+                            button(data-id=comment._id) Edit comment
+                        hr
 block scripts 
     script(src="/static/js/videoPlayer.js")
     script(src="/static/js/commentSection.js")
+
+    
