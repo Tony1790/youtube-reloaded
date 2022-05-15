@@ -22,17 +22,28 @@ block content
                 div 
                     span#fullscreen
                         i.fas.fa-expand
-    
-    div
-        p=video.description
-        small=video.createdAt
-    div 
-        small Uploaded by 
-            a(href=`/users/${video.owner._id}`) #{video.owner.name}
-    if String(video.owner._id) === String(loggedInUser._id)
-        a(href=`${video.id}/edit`) Edit Video &rarr;
-        br 
-        a(href=`${video.id}/delete`) Delete Video &rarr; 
+        div.video__data-box
+            div.video__data-title
+                p=video.title
+            div.video__data-metadata
+                small.video__data-views 조회수 #{video.meta.views} 회
+                span 　
+                small.video__data-createdAt=new Date(video.createdAt).toLocaleDateString("ko-kr", {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})
+                span 　
+            div.video__data-description-box
+                small.video__data-description=video.description
+                
+            div.video__data-userAndBtn            
+                div.video__data-user
+                    img.video__data-userAvatar(src=loggedInUser.avatarUrl)
+                    a.video__data-username(href=`/users/${video.owner._id}`) #{video.owner.name}
+                if String(video.owner._id) === String(loggedInUser._id)
+                    div.video__data-Btns
+                        div.video__data-Btns-edit
+                            a(href=`${video.id}/edit`) 수정
+                        div.video__data-Btns-delete
+                            a(href=`${video.id}/delete`) 삭제
+
     if loggedIn
         div.video__add-comments
             form.video__comments-form#commentForm

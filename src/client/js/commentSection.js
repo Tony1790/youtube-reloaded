@@ -103,6 +103,13 @@ const handleEditComment = async (event) => {
   }
 };
 
+const handlef = (event) => {
+  const close =
+    event.target.parentNode.parentNode.parentNode.querySelector(
+      ".edit__comment"
+    );
+  close.style = "display : none";
+};
 const editedComment = (text) => {
   const newEditedComment = document.getElementById("comment");
   newEditedComment.innerText = ` ${text}`;
@@ -115,15 +122,7 @@ editBtn.forEach((element) =>
   })
 );
 
-editCancelBtn.forEach((element) =>
-  element.addEventListener("click", (event) => {
-    const close =
-      event.target.parentNode.parentNode.parentNode.querySelector(
-        ".edit__comment"
-      );
-    close.style = "display : none";
-  })
-);
+editCancelBtn.forEach((element) => element.addEventListener("click", handlef));
 
 if (editForm) {
   editForm.addEventListener("submit", handleEditComment);
