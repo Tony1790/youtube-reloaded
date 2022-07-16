@@ -1,6 +1,6 @@
 import User from "../models/User";
 import Comment from "../models/Comment";
-import Video from "../models/video";
+import Video from "../models/Video";
 
 export const home = async (req, res) => {
   const videos = await Video.find({})
