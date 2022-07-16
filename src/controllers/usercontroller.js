@@ -153,7 +153,7 @@ export const finishKakaoLogin = async (req, res) => {
     client_id: process.env.KA_CLIENT,
     client_secret: process.env.KA_SECRET,
     grant_type: "authorization_code",
-    redirect_uri: "http://localhost:4000/users/kakao/finish",
+    redirect_uri: "https://youtubereloaded.herokuapp.com/users/kakao/finish",
     code: req.query.code,
   };
   const params = new URLSearchParams(config).toString();
