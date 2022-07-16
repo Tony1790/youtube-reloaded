@@ -10,7 +10,6 @@ module.exports = {
     commentSection: BASE_JS + "commentSection.js",
   },
   mode: "development",
-  watch: true, //heroku로 변경시 수정
   plugins: [
     new MiniCssExtractPlugin({
       filename: "css/styles.css",
