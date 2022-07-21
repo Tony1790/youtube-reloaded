@@ -65,12 +65,13 @@ export const postUpload = async (req, res) => {
   const { video, thumb } = req.files;
   //multer가 req.file을 제공해주고 file 안에는 path가 있다.
   const { title, description, hashtags } = req.body;
+  const isHeroku = process.env.NODE_ENV === "production";
   try {
     const newVideo = await Video.create({
       title,
       description,
-      fileUrl: video[0].location,
-      thumbUrl: thumb[0].location,
+      fileUrl: isHeroku ? video[0].location : video[0].path,
+      thumbUrl: isHeroku ? thumb[0].location : thumb[0].path,
       owner: _id,
       hashtags: Video.formatHashtag(hashtags),
     });
